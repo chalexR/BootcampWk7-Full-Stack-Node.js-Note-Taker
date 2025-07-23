@@ -36,3 +36,15 @@ const writeData = (data_ => {
     fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2))
 })
 
+// Handle GET request at root to show public index.html file
+app.get("/", (req, res) => {
+    res.sendFile(path.join(__dirname, "public", "index.htm"))
+})
+
+
+
+
+// Start the server and listen on the specified port
+app.listen(PORT, () => {
+  console.log(`Server is running on http://localhost:${PORT}`);
+});
