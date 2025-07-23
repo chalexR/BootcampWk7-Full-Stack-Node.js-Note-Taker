@@ -31,9 +31,13 @@ const readData = () => {
     return JSON.parse(data)
 }
 
-const writeData = (data_ => {
+const writeData = (data => {
     // use fs method writeFileSync to write a file with the data which is converted into a JSON string, no filters/all records, 2 space indented
     fs.writeFileSync(dataFilePath, JSON.stringify(data, null, 2))
+})
+
+const maxID = (data => {
+    return Math.max(...data.map(o => o.y))
 })
 
 // Handle GET request at root to show public index.html file
@@ -41,8 +45,27 @@ app.get("/", (req, res) => {
     res.sendFile(path.join(__dirname, "public", "index.htm"))
 })
 
+// Handle GET request to retrieve stored data
+app.get("/data", (req, res) => {
+    try{
+        const data = readData();
+        if (data.length > 0){
+            currID = maxID(data)
+            res.status(201).send(currID)
+        }else{
+            res.status(404).send("No Current Data to Display!")
+        }
+    }catch(err){
+        res.status(500).send("Code Error:\n"+err)
+    }
+  
+});
 
 
+// Wildcard route to handle undefined routes
+app.all("*", (req, res) => {
+  res.status(404).send("Route not found");
+});
 
 // Start the server and listen on the specified port
 app.listen(PORT, () => {
