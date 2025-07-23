@@ -79,6 +79,9 @@ app.post("/data", (req, res) => {
 
 // READ Handle GET request to retrieve stored data
 app.get("/data", (req, res) => {
+    if (Object.keys(req.body).length > 0){
+        return res.status(500).send("Unexpected paramter in body");
+    }
     try{
         // read the current data
         const data = readData();
@@ -96,6 +99,9 @@ app.get("/data", (req, res) => {
 
 // UPDATE Handle PUT requests to update a record
 app.put("/data/:id", (req, res) => {
+    if (req.body){ 
+        return res.status(500).send("Server Error:\nUnexpected parameters included in body")
+    }
     try{
         const data = readData()
         // finds the index that the correct record is stored under by searching for the passed ID
@@ -117,12 +123,18 @@ app.put("/data/:id", (req, res) => {
 
 // DELETE Handle DELETE requests to destroy a record
 app.delete("/data/:id", (req, res) => {
+    if (Object.keys(req.body).length > 0){
+        return res.status(500).send("Unexpected paramter in body");
+    }
     try{
         // get the existing data
         const data = readData()
 
         //definte the data we are deleting
         const deletedData = data.find((item) => item.id === parseInt(req.params.id));
+        if (!deletedData) {
+            return res.status(404).send("Data not found");
+        }
         // Remove the selected post from the array (filter data, go through each record and only store items where id doesn't match the delete id )
         const newData = data.filter((item) => item.id !== parseInt(req.params.id))
         // Save the data back to the file without the deleted record
