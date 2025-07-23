@@ -115,6 +115,25 @@ app.put("/data/:id", (req, res) => {
     }
 })
 
+// DELETE Handle DELETE requests to destroy a record
+app.delete("/data/:id", (req, res) => {
+    try{
+        // get the existing data
+        const data = readData()
+
+        //definte the data we are deleting
+        const deletedData = data.find((item) => item.id === parseInt(req.params.id));
+        // Remove the selected post from the array (filter data, go through each record and only store items where id doesn't match the delete id )
+        const newData = data.filter((item) => item.id !== parseInt(req.params.id))
+        // Save the data back to the file without the deleted record
+        writeData(newData);
+        res.json({ message: "Data deleted successfully", data: deletedData });
+    }catch{
+        // more serious error 
+        res.status(500).send("Server Error:\n"+err)
+    }
+})
+
 // Wildcard route to handle undefined routes
 app.all("*", (req, res) => {
     res.status(404).send("Route not found");
