@@ -14,7 +14,33 @@
 
     <ul id="data-list"></ul>
 
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            
+            const dataList = document.getElementById("data-list")
+            dataList.innerHTML = "" // Clear the list before rendering
+            itemCount = 1
+            while(itemCount <= 10){
+                const li = document.createElement("li");
+                //li.textContent = item.id + ": " + JSON.stringify(item)
+                htmlContent = '<div class="">'
+                
+                htmlContent += '<p class="task-content task-' + itemCount + '">Task'+itemCount+'</p>'
+                htmlContent += '<p class="task-created">Created At: Date</p>'
+                htmlContent += '<p class="task-edited"><i>editted: Date</i></p>'
+                htmlContent += '</div>'
+                htmlContent += '<div class="">'
+                htmlContent += '<button type="button" class="task-edit" name="'+ itemCount +'">Edit</button>'
+                htmlContent += '<button type="button" class="task-delete" name="'+ itemCount +'">Delete</button>'
+                htmlContent += '</div>'
 
-    <script src="./script.js"></script>
+                li.innerHTML = htmlContent
+                dataList.appendChild(li)
+
+                itemCount++
+            }
+        })
+    </script>
+    <!--<script src="./script.js"></script>-->
 </body>
 </html>
