@@ -34,6 +34,22 @@ body{
     background-color: var(--color-warn);
     color: var(--color-accent);
 }
+#task-notification{display:none;}
+.task-note-visible{
+    display:block !important;
+}
+.bg-danger{
+    background-color: var(--color-warn) !important;
+    color: var(--color-accent);
+    font-weight: bold;
+    border-radius: 25px;
+}
+.bg-success{
+    background-color: var(--color-succ) !important;
+    color: var(--color-accent);
+    font-weight: bold;
+    border-radius: 25px;
+}
 
 @media screen and (max-width:800px){
     .task-mobile{

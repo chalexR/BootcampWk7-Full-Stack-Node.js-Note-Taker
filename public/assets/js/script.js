@@ -1,3 +1,4 @@
+
 document.addEventListener("DOMContentLoaded", () => {
     const dataList = document.getElementById("data-list")
     const dataForm = document.getElementById("data-form")
@@ -5,6 +6,7 @@ document.addEventListener("DOMContentLoaded", () => {
     let editInput = document.getElementById("edit-id")
     const taskButton = document.getElementById("task-button")
     const taskHeader = document.getElementById("task-header")
+    const taskNote = document.getElementById("task-notification")
 
     // Function to fetch data from the backend
     const fetchData = async () => {
@@ -42,23 +44,34 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
+    document.addEventListener("click", () => {
+        // quickly remove the notification box on click. as soon as the user interacts witht he site again after seeing a notification it will dissapear
+        taskNote.classList.remove("bg-success")
+        taskNote.classList.remove("task-note-visible")
+        taskNote.textContent = ""
+    })
+
     // Handle form submission to add new data
     dataForm.addEventListener("submit", async (event) => {
         event.preventDefault()
         const newData = { content: dataInput.value }
         let editInput = document.getElementById("edit-id").value
-        console.log("Input: "+parseInt(editInput))
+        // If there is nothing in the edit id carrier then we are adding a new record
         if (editInput == ""){
             try {
+                // try a post 
                 const response = await fetch("./data", {
                     method: "POST",
                     headers: { "Content-Type": "application/json" },
                     body: JSON.stringify(newData),
                 })
-                console.log(response)
+                // if the response is good then 
                 if (response.ok) {
                     dataInput.value = "" // Clear input field
                     fetchData() // Refresh the list
+                    taskNote.classList.add("bg-success")
+                    taskNote.classList.add("task-note-visible")
+                    taskNote.textContent = "Task Added Successfully"
                 }
             } catch (error) {
                 console.error("Error adding data:", error)
@@ -76,7 +89,10 @@ document.addEventListener("DOMContentLoaded", () => {
                 if (response.ok) {
                     dataInput.value = "" // Clear input field
                     editInput.value = ""
+                    taskNote.classList.add("bg-success")
+                    taskNote.textContent = "Task updated Successfully"
                     taskButton.textContent = "Add Task"
+                    taskNote.classList.add("task-note-visible")
                     taskHeader.textContent = "Add a Task:"
                     fetchData() // Refresh the list
                 }
@@ -85,7 +101,6 @@ document.addEventListener("DOMContentLoaded", () => {
             }
         }
     })
-
     // Handle edit & delete requests, because the buttons are loaded in dynamically we can't use a simple event listener. 
     // Here we are listening to an event on the container box and the checking that the target matches one of the delete buttons
     dataList.addEventListener("click", async (event) => {
@@ -98,11 +113,13 @@ document.addEventListener("DOMContentLoaded", () => {
                     headers: { "Content-Type": "application/json" },
                     body: "",
                 })
-                console.log(response)
                 if (response.ok) {
-                    // TODO: Add a notification
+
                     dataInput.value = "" // Clear input field
                     fetchData() // Refresh the list
+                    taskNote.classList.add("bg-danger")
+                    taskNote.classList.add("task-note-visible")
+                    taskNote.textContent = "Task Deleted Successfully"
                 }
             } catch (error) {
                 console.error("Error deleting data:", error)
