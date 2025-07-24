@@ -110,31 +110,21 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     // UPDATE
         if (event.target.matches(".task-edit")) {
+            // To update we are simply setting the form up to handle the update request
+            // get the id from the name of the button
             const editID = event.target.name;
+            // grab the content from the corresponding task record
             const editCont = document.querySelector(".task-content.task-"+ editID)
             const editText = editCont.textContent
+            // put the content into the input box
             dataInput.value = editText
+            // put the ID into a hidden input
             editInput.value = editID
+            // change the value of the header and button
             taskButton.textContent = "Edit Task"
             taskHeader.textContent = "Edit a Task:"
-
-            /*
-            try {
-                const response = await fetch("/data/"+ delID, {
-                    method: "DELETE",
-                    headers: { "Content-Type": "application/json" },
-                    body: "",
-                })
-                console.log(response)
-                if (response.ok) {
-                    // TODO: Add a notification
-                    dataInput.value = "" // Clear input field
-                    fetchData() // Refresh the list
-                }
-            } catch (error) {
-                console.error("Error deleting data:", error)
-            }
-            */
+            // mainly for mobile, make the screen focus on the form after clicking the button
+            taskHeader.scrollIntoView();
         }
     });
 
