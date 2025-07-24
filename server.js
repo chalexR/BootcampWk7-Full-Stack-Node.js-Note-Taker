@@ -64,13 +64,14 @@ app.post("/data", (req, res) => {
         const newData = { id: currID, ...req.body, postedAt: timeDay, editAt: null }
         // check that they are uploading a content key 
         if (!("content" in req.body)){
-            res.status(500).json({ message: "Invalid content upload", data: newData });
+            console.log("Invalid content upload")
+            return res.status(500).json({ message: "Invalid content upload", data: newData });
         }
         // add the new data to the existing data
         currentData.push(newData)
         // write all the data to a file using our function
         writeData(currentData)
-        res.json({ message: "Data saved successfully", data: newData });
+        return res.status(201).json({ message: "Data saved successfully", data: newData });
     }catch (err) {
         // more serious error 
         res.status(500).send("Server Error:\n"+err)
@@ -99,9 +100,6 @@ app.get("/data", (req, res) => {
 
 // UPDATE Handle PUT requests to update a record
 app.put("/data/:id", (req, res) => {
-    if (req.body){ 
-        return res.status(500).send("Server Error:\nUnexpected parameters included in body")
-    }
     try{
         const data = readData()
         // finds the index that the correct record is stored under by searching for the passed ID
@@ -114,7 +112,7 @@ app.put("/data/:id", (req, res) => {
         updatedData = { ...data[index], ...req.body, editAt: timeDay }
         data[index] = updatedData
         writeData(data);
-        res.json({ message: "Data updated successfully", data: updatedData });
+        res.status(200).json({ message: "Data updated successfully", data: updatedData });
     }catch(err){
         // more serious error 
         res.status(500).send("Server Error:\n"+err)
