@@ -1,0 +1,43 @@
+:root{
+    --color-bg : #0D1B2A;
+    --color-accent : #1B263B;
+    --color-highl : #415A77;
+    --color-text : #E0E1DD;
+    --color-cta : #778DA9;
+    --color-succ : #6FCF97;
+    --color-warn : #E76F51;
+}
+body{
+    background-color: var(--color-bg);
+    color: var(--color-text);
+}
+.task-edited, .task-created{font-size : 12px;}
+.btn-primary{
+    background-color: var(--color-cta);
+    border-color: var(--color-cta);
+    color: var(--color-accent);
+}
+.btn-primary:hover{
+    background-color: var(--color-highl);
+    border-color: var(--color-cta);
+}
+.btn-primary:focus {
+    background-color: var(--color-succ) !important;
+    border:none;
+    color: var(--color-bg) !important;
+}
+.btn-success{
+    background-color: var(--color-succ);
+    color: var(--color-accent);
+}
+.btn-danger{
+    background-color: var(--color-warn);
+    color: var(--color-accent);
+}
+
+@media screen and (max-width:800px){
+    .task-mobile{
+        position: relative !important;
+        width:75% !important;
+    }
+}

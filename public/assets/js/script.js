@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", () => {
     const dataInput = document.getElementById("data-input")
     let editInput = document.getElementById("edit-id")
     const taskButton = document.getElementById("task-button")
+    const taskHeader = document.getElementById("task-header")
 
     // Function to fetch data from the backend
     const fetchData = async () => {
@@ -12,22 +13,28 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = await response.json()
             dataList.innerHTML = "" // Clear the list before rendering
             data.data.forEach((item) => {
+                // Create a new list element
                 const li = document.createElement("li");
-                //li.textContent = item.id + ": " + JSON.stringify(item)
-                htmlContent = '<div class="">'
+                // Make it flex
+                li.classList.add("d-flex")
+                // *** BUILD TASK CONTENT
+                htmlContent = '<div class="flex-fill border-top border-secondary pt-2">'
                 
-                htmlContent += '<p class="task-content task-' + item.id + '">' + item.content + '</p>'
-                htmlContent += '<p class="task-created">Created At: ' + item.postedAt + '</p>'
-                if(item.editAt){
-                    htmlContent += '<p class="task-edited"><i>editted: ' + item.editAt +'</i></p>'
-                }
+                    htmlContent += '<p class="task-content task-' + item.id + '">' + item.content + '</p>'
+                    htmlContent += '<p class="task-created mr-2 text-secondary d-inline-block">Created At: ' + item.postedAt + '</p>'
+                    if(item.editAt){ // only show if the task has been edited. 
+                        htmlContent += '<p class="task-edited ml-2 text-secondary d-inline-block"><i>editted: ' + item.editAt +'</i></p>'
+                    }
                 htmlContent += '</div>'
-                htmlContent += '<div class="">'
-                htmlContent += '<button type="button" class="task-edit" name="'+ item.id +'">Edit</button>'
-                htmlContent += '<button type="button" class="task-delete" name="'+ item.id +'">Delete</button>'
+                // BUILD EDIT & DELETE BUTTONS
+                htmlContent += '<div class="border-top border-secondary pt-4">'
+                    htmlContent += '<button type="button" class="task-edit btn-success rounded-pill" name="'+ item.id +'">Edit</button>'
+                    htmlContent += '<button type="button" class="task-delete btn-danger rounded-pill" name="'+ item.id +'">Delete</button>'
                 htmlContent += '</div>'
-
+                
+                // add html to the list item
                 li.innerHTML = htmlContent
+                // add the list item to our unordered list 
                 dataList.appendChild(li)
             });
         } catch (error) {
@@ -39,7 +46,8 @@ document.addEventListener("DOMContentLoaded", () => {
     dataForm.addEventListener("submit", async (event) => {
         event.preventDefault()
         const newData = { content: dataInput.value }
-        let editInput = document.getElementById("edit-id")
+        let editInput = document.getElementById("edit-id").value
+        console.log("Input: "+parseInt(editInput))
         if (editInput == ""){
             try {
                 const response = await fetch("./data", {
@@ -69,6 +77,7 @@ document.addEventListener("DOMContentLoaded", () => {
                     dataInput.value = "" // Clear input field
                     editInput.value = ""
                     taskButton.textContent = "Add Task"
+                    taskHeader.textContent = "Add a Task:"
                     fetchData() // Refresh the list
                 }
             } catch (error) {
@@ -107,6 +116,7 @@ document.addEventListener("DOMContentLoaded", () => {
             dataInput.value = editText
             editInput.value = editID
             taskButton.textContent = "Edit Task"
+            taskHeader.textContent = "Edit a Task:"
 
             /*
             try {
